@@ -62,7 +62,8 @@ export default function AddStudioPage() {
   useEffect(() => {
     if (!authLoading && !user) {
       toast.error('Sign in required to create a studio listing');
-      router.push('/login?from=/studios/add');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/studios/add';
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
     }
   }, [user, authLoading, router]);
 

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import {
-  LayoutDashboard,
   Building2,
   CalendarCheck,
   Bookmark,
@@ -15,8 +14,7 @@ import {
   ArrowRight,
   TrendingUp,
   Sparkles,
-  Loader2,
-  UserCheck
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -52,7 +50,9 @@ export default function DashboardOverviewPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login?from=/dashboard');
+      toast.error('Please sign in to access your dashboard');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/dashboard';
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     if (user) {

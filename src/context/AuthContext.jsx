@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -19,18 +19,19 @@ export const AuthProvider = ({ children }) => {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-  const issueJwtToken = async (email) => {
+  const issueJwtToken = useCallback(async (email) => {
     try {
-      await fetch(`${API_URL}/api/auth/jwt`, {
+      const res = await fetch(`${API_URL}/api/auth/jwt`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email }),
-        credentials: 'include'
       });
+      return res;
     } catch (err) {
-      console.error('Failed to issue JWT cookie:', err);
+      console.warn('Failed to issue JWT cookie (server may be offline or starting up):', err);
     }
-  };
+  }, [API_URL]);
 
   const clearJwtCookie = async () => {
     try {
@@ -39,36 +40,89 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include'
       });
     } catch (err) {
-      console.error('Failed to clear JWT cookie:', err);
+      console.warn('Failed to clear JWT cookie on logout (server may be offline or starting up):', err);
     }
   };
 
-  const createUser = (email, password) => {
+  const createUser = async (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    try {
+      return await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('[AuthContext] createUser error:', {
+        code: error?.code,
+        message: error?.message,
+        customData: error?.customData,
+        raw: error
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const loginUser = (email, password) => {
+  const loginUser = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('[AuthContext] loginUser error:', {
+        code: error?.code,
+        message: error?.message,
+        customData: error?.customData,
+        raw: error
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    try {
+      return await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error('[AuthContext] loginWithGoogle error:', {
+        code: error?.code,
+        message: error?.message,
+        customData: error?.customData,
+        raw: error
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logoutUser = async () => {
     setLoading(true);
-    await clearJwtCookie();
-    return signOut(auth);
+    try {
+      await clearJwtCookie();
+      return await signOut(auth);
+    } catch (error) {
+      console.warn('[AuthContext] logoutUser error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateUserProfile = (name, photo) => {
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: photo
-    });
+  const updateUserProfile = async (name, photo) => {
+    try {
+      return await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photo
+      });
+    } catch (error) {
+      console.error('[AuthContext] updateUserProfile error:', {
+        code: error?.code,
+        message: error?.message,
+        customData: error?.customData,
+        raw: error
+      });
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -81,7 +135,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [issueJwtToken]);
 
   const authInfo = {
     user,

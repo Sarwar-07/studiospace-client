@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MapPin, Star, DollarSign, Users } from 'lucide-react';
+import { MapPin, Star, Users } from 'lucide-react';
 
 export default function StudioCard({ studio }) {
   const {
@@ -19,7 +19,7 @@ export default function StudioCard({ studio }) {
   return (
     <div className="group rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
       {/* Thumbnail */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+      <Link href={`/studios/${_id}`} className="block relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
         <img
           src={displayImage}
           alt={title}
@@ -33,13 +33,15 @@ export default function StudioCard({ studio }) {
           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
           <span>{Number(rating).toFixed(1)}</span>
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col">
-        <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1">
-          {title}
-        </h3>
+        <Link href={`/studios/${_id}`}>
+          <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1">
+            {title}
+          </h3>
+        </Link>
 
         <div className="flex items-center gap-1.5 text-neutral-500 dark:text-neutral-400 text-sm mt-1.5 mb-4">
           <MapPin className="w-4 h-4 text-neutral-400 shrink-0" />

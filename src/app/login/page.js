@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const from = searchParams.get('from') || '/';
+  const from = searchParams.get('redirect') || searchParams.get('from') || '/';
   const { loginUser, loginWithGoogle } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -27,6 +27,13 @@ function LoginForm() {
       router.push(from);
       router.refresh();
     } catch (err) {
+      console.error('Sign-in failed:', {
+        code: err?.code,
+        message: err?.message,
+        customData: err?.customData,
+        response: err?.customData?._tokenResponse,
+        error: err
+      });
       toast.error(err.message?.replace('Firebase: ', '') || 'Failed to sign in. Verify your credentials.');
     } finally {
       setIsSubmitting(false);
@@ -41,6 +48,13 @@ function LoginForm() {
       router.push(from);
       router.refresh();
     } catch (err) {
+      console.error('Google sign-in failed:', {
+        code: err?.code,
+        message: err?.message,
+        customData: err?.customData,
+        response: err?.customData?._tokenResponse,
+        error: err
+      });
       toast.error(err.message?.replace('Firebase: ', '') || 'Google sign-in cancelled or failed.');
     } finally {
       setIsSubmitting(false);

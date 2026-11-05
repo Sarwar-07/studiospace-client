@@ -53,6 +53,13 @@ export default function RegisterPage() {
       router.push('/');
       router.refresh();
     } catch (err) {
+      console.error('Registration failed:', {
+        code: err?.code,
+        message: err?.message,
+        customData: err?.customData,
+        response: err?.customData?._tokenResponse,
+        error: err
+      });
       toast.error(err.message?.replace('Firebase: ', '') || 'Registration failed. Try again.');
     } finally {
       setIsSubmitting(false);
@@ -67,6 +74,13 @@ export default function RegisterPage() {
       router.push('/');
       router.refresh();
     } catch (err) {
+      console.error('Google sign-in failed:', {
+        code: err?.code,
+        message: err?.message,
+        customData: err?.customData,
+        response: err?.customData?._tokenResponse,
+        error: err
+      });
       toast.error(err.message?.replace('Firebase: ', '') || 'Google authentication failed.');
     } finally {
       setIsSubmitting(false);

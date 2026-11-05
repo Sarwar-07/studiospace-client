@@ -7,13 +7,11 @@ import { useAuth } from '@/context/AuthContext';
 import {
   Bookmark,
   Trash2,
-  ExternalLink,
   MapPin,
   Star,
   Users,
   Loader2,
-  ArrowRight,
-  Sparkles
+  ArrowRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -45,7 +43,9 @@ export default function WishlistPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login?from=/dashboard/wishlist');
+      toast.error('Please sign in to view your saved wishlist');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/dashboard/wishlist';
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     if (user) {
@@ -124,7 +124,7 @@ export default function WishlistPage() {
                 className="group rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
               >
                 {/* Image */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                <Link href={`/studios/${studioId}`} className="block relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
                   <img
                     src={displayImg}
                     alt={studio.title}
@@ -137,13 +137,15 @@ export default function WishlistPage() {
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     <span>{Number(studio.rating || 5).toFixed(1)}</span>
                   </div>
-                </div>
+                </Link>
 
                 {/* Details */}
                 <div className="p-5 flex-1 flex flex-col">
-                  <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 line-clamp-1">
-                    {studio.title}
-                  </h3>
+                  <Link href={`/studios/${studioId}`}>
+                    <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1">
+                      {studio.title}
+                    </h3>
+                  </Link>
 
                   <div className="flex items-center gap-1.5 text-neutral-500 dark:text-neutral-400 text-sm mt-1 mb-4">
                     <MapPin className="w-4 h-4 text-neutral-400 shrink-0" />

@@ -13,8 +13,7 @@ import {
   CheckCircle,
   AlertCircle,
   Clock4,
-  Loader2,
-  DollarSign
+  Loader2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -48,7 +47,9 @@ export default function MyBookingsPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login?from=/dashboard/my-bookings');
+      toast.error('Please sign in to view your reservations');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/dashboard/my-bookings';
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     if (user) {

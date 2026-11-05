@@ -9,16 +9,13 @@ import {
   Star,
   Users,
   Shield,
-  Clock,
   Calendar,
   DollarSign,
   Heart,
-  Share2,
   CheckCircle2,
   AlertCircle,
   ArrowLeft,
-  Loader2,
-  Sparkles
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -45,12 +42,16 @@ export default function StudioDetailPage() {
     async function loadStudio() {
       try {
         const res = await fetch(`${API_URL}/api/studios/${id}`);
+        if (res.status === 404) {
+          setStudio(null);
+          return;
+        }
         if (!res.ok) throw new Error('Studio not found');
         const data = await res.json();
         setStudio(data);
       } catch (err) {
-        console.error(err);
-        toast.error('Unable to retrieve studio space details');
+        console.error('Error loading studio:', err);
+        setStudio(null);
       } finally {
         setLoading(false);
       }
@@ -61,11 +62,31 @@ export default function StudioDetailPage() {
     }
   }, [id, API_URL]);
 
+  // Check initial wishlist state for authenticated user
+  useEffect(() => {
+    async function checkWishlist() {
+      if (!user || !id) return;
+      try {
+        const res = await fetch(`${API_URL}/api/wishlist`, {
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const list = await res.json();
+          const exists = list.some((item) => item.studioId === id || item.studio?._id === id);
+          setIsWishlisted(exists);
+        }
+      } catch (err) {
+        console.warn('Could not check wishlist status:', err);
+      }
+    }
+    checkWishlist();
+  }, [user, id, API_URL]);
+
   // Wishlist Toggle
   const handleToggleWishlist = async () => {
     if (!user) {
       toast.error('Please sign in to save studios to your wishlist');
-      router.push(`/login?from=/studios/${id}`);
+      router.push(`/login?redirect=${encodeURIComponent(`/studios/${id}`)}`);
       return;
     }
 
@@ -118,7 +139,7 @@ export default function StudioDetailPage() {
 
     if (!user) {
       toast.error('Please sign in to book this studio space');
-      router.push(`/login?from=/studios/${id}`);
+      router.push(`/login?redirect=${encodeURIComponent(`/studios/${id}`)}`);
       return;
     }
 

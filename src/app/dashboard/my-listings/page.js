@@ -11,11 +11,9 @@ import {
   Trash2,
   ExternalLink,
   MapPin,
-  DollarSign,
-  Users,
   Loader2,
   X,
-  AlertTriangle
+  ExternalLink as OpenIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -68,7 +66,9 @@ export default function MyListingsPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login?from=/dashboard/my-listings');
+      toast.error('Please sign in to view your studio listings');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/dashboard/my-listings';
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     if (user) {
@@ -99,7 +99,12 @@ export default function MyListingsPage() {
       const res = await fetch(`${API_URL}/api/studios/${editingStudio._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editFormData),
+        body: JSON.stringify({
+          ...editFormData,
+          hourlyRate: parseFloat(editFormData.hourlyRate),
+          securityDeposit: parseFloat(editFormData.securityDeposit || 0),
+          maxCapacity: parseInt(editFormData.maxCapacity)
+        }),
         credentials: 'include'
       });
 
@@ -178,7 +183,7 @@ export default function MyListingsPage() {
         </Link>
       </div>
 
-      {/* Listings Table / Cards */}
+      {/* Listings Table */}
       {listings.length > 0 ? (
         <div className="bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
@@ -199,15 +204,19 @@ export default function MyListingsPage() {
                     <tr key={studio._id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/40 transition">
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-4">
-                          <img
-                            src={displayImg}
-                            alt={studio.title}
-                            className="w-16 h-12 rounded-xl object-cover border border-neutral-200 dark:border-neutral-800 shrink-0"
-                          />
+                          <Link href={`/studios/${studio._id}`}>
+                            <img
+                              src={displayImg}
+                              alt={studio.title}
+                              className="w-16 h-12 rounded-xl object-cover border border-neutral-200 dark:border-neutral-800 shrink-0 hover:opacity-80 transition"
+                            />
+                          </Link>
                           <div>
-                            <p className="font-bold text-neutral-900 dark:text-neutral-100 line-clamp-1">
-                              {studio.title}
-                            </p>
+                            <Link href={`/studios/${studio._id}`} className="hover:underline">
+                              <p className="font-bold text-neutral-900 dark:text-neutral-100 line-clamp-1">
+                                {studio.title}
+                              </p>
+                            </Link>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1 mt-0.5">
                               <MapPin className="w-3.5 h-3.5" />
                               <span className="truncate max-w-xs">{studio.location}</span>
@@ -228,20 +237,25 @@ export default function MyListingsPage() {
                       </td>
                       <td className="py-4 px-6 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {/* External Link Icon to /studios/[id] */}
                           <Link
                             href={`/studios/${studio._id}`}
                             className="p-2 rounded-lg text-neutral-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
-                            title="View Public Page"
+                            title="View Public Details Page"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </Link>
+
+                          {/* Edit Action (Pencil Icon) */}
                           <button
                             onClick={() => handleOpenEdit(studio)}
                             className="p-2 rounded-lg text-neutral-500 hover:text-amber-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
-                            title="Edit Listing"
+                            title="Edit Listing (Modal)"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
+
+                          {/* Delete Action (Trash Icon) */}
                           <button
                             onClick={() => handleDeleteListing(studio._id, studio.title)}
                             disabled={deletingId === studio._id}
@@ -288,9 +302,17 @@ export default function MyListingsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-6">
-              <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                <Edit2 className="w-5 h-5 text-indigo-600" /> Edit Studio Listing
-              </h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                  <Edit2 className="w-5 h-5 text-indigo-600" /> Edit Studio Listing
+                </h2>
+                <Link
+                  href={`/studios/edit/${editingStudio._id}`}
+                  className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1 font-medium"
+                >
+                  Full page editor <OpenIcon className="w-3 h-3" />
+                </Link>
+              </div>
               <button
                 onClick={() => setEditingStudio(null)}
                 className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
