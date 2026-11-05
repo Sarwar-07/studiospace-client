@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { signInWithPopup, signInWithRedirect, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/firebase/firebase.config';
 import { Sparkles, User, Image as ImageIcon, Mail, Lock, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get('redirect') || searchParams.get('from') || '/';
   const { user, createUser, updateUserProfile } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -22,12 +24,12 @@ export default function RegisterPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // If already authenticated (e.g. returning from signInWithRedirect), route to home
+  // If already authenticated (e.g. returning from signInWithRedirect), route to target destination
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.push(from);
     }
-  }, [user, router]);
+  }, [user, from, router]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,7 +61,7 @@ export default function RegisterPage() {
       await createUser(formData.email, formData.password);
       await updateUserProfile(formData.name, formData.photoURL);
       toast.success('Registration successful! Welcome to StudioSpace.');
-      router.push('/');
+      router.push(from);
       router.refresh();
     } catch (err) {
       console.error('Registration failed:', {
@@ -102,7 +104,7 @@ export default function RegisterPage() {
       });
 
       toast.success('Signed in with Google!');
-      router.push('/');
+      router.push(from);
       router.refresh();
     } catch (error) {
       console.warn('Google Sign-in Error:', error);
@@ -138,7 +140,10 @@ export default function RegisterPage() {
 
         <button
           type="button"
-          onClick={handleGoogleSignIn}
+          onClick={(e) => {
+            e.preventDefault();
+            handleGoogleSignIn();
+          }}
           disabled={isSubmitting}
           className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-750 font-medium text-sm transition disabled:opacity-50"
         >
@@ -148,7 +153,7 @@ export default function RegisterPage() {
             <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.97 0 12c0 2.03.45 3.84 1.25 5.42l4.03-3.15Z" />
             <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z" />
           </svg>
-          Sign up with Google
+          <span>Continue with Google</span>
         </button>
 
         <div className="flex items-center my-6">
@@ -265,5 +270,13 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[85vh] flex items-center justify-center text-sm text-neutral-500">Loading registration...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

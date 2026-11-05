@@ -124,20 +124,50 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getRedirectResult(auth).catch((err) => {
-      console.warn('Redirect auth result check:', err);
-    });
+    let isMounted = true;
 
+    // 1. Process Google redirect return
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result && result.user && isMounted) {
+          const redirectUser = result.user;
+          // Issue backend JWT cookie
+          try {
+            await fetch(`${API_URL}/api/auth/jwt`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: redirectUser.email,
+                name: redirectUser.displayName,
+                photoURL: redirectUser.photoURL,
+              }),
+              credentials: 'include',
+            });
+          } catch (jwtErr) {
+            console.warn('Redirect JWT issuance warning:', jwtErr);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error handling redirect result:', error);
+      });
+
+    // 2. Track auth state
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser?.email) {
-        await issueJwtToken(currentUser.email);
+      if (isMounted) {
+        setUser(currentUser);
+        if (currentUser?.email) {
+          await issueJwtToken(currentUser.email);
+        }
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [issueJwtToken]);
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, [API_URL, issueJwtToken]);
 
   const authInfo = {
     user,

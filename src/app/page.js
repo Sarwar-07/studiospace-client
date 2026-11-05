@@ -3,6 +3,8 @@ import HeroSlider from '@/components/HeroSlider';
 import StudioCard from '@/components/StudioCard';
 import { Camera, Music, Video, Palette, Mic2, ShieldCheck, Clock, Zap, ArrowRight } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 async function getFeaturedStudios() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
   try {
