@@ -1,7 +1,15 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Sparkles, Camera, Music, Video, Palette } from 'lucide-react';
 
 export default function Footer() {
+  const [year, setYear] = useState(2026);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
   return (
     <footer className="mt-auto border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -51,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} StudioSpace Marketplace Inc. All rights reserved.
+          © {year} StudioSpace Marketplace Inc. All rights reserved.
         </div>
       </div>
     </footer>
