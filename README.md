@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# StudioSpace | Creative Workspace Marketplace (Client)
 
-## Getting Started
+A modern full-stack creative workspace marketplace frontend built with **Next.js (App Router)**, **Tailwind CSS**, and **Firebase Authentication**. StudioSpace bridges photo directors, podcast hosts, sound designers, and visual creators with rentable studios, sound booths, and production stages.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Live Links & Repositories
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Live Client Application:** [studiospace-client.vercel.app](https://studiospace-client.vercel.app) *(Update with your production Vercel URL)*
+- **Server API Repository:** [https://github.com/Sarwar-07/studiospace-server](https://github.com/Sarwar-07/studiospace-server)
+- **Client Repository:** [https://github.com/Sarwar-07/studiospace-client](https://github.com/Sarwar-07/studiospace-client)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Core Features & Challenge Solutions
 
-## Learn More
+1. **Secure Session Shielding (JWT & HTTPOnly Cookies):**
+   - Seamlessly integrates Firebase Auth on the client with Express session tokens passed via secure `credentials: 'include'` cookies.
+   - Guarded private routes for Studio creation, booking management, listings control, and user wishlists.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Automated Double-Booking Prevention UI:**
+   - Dedicated interactive date and time range slot selector.
+   - Real-time client-side duration and cost calculations (hourly rate × reserved hours + security deposit).
+   - Catches server `409 Conflict` collision responses and warns users immediately if an overlapping schedule already exists on that date.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Dashboard Analytics & Aggregations:**
+   - Visual KPI overview consuming backend MongoDB `$group` and `$lookup` aggregations.
+   - Real-time tracking of created listings, active bookings, saved spaces, and total production expenditure.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Client-Side PDF Invoicing:**
+   - Instant vector PDF receipt and invoice generation via `jspdf` and `jspdf-autotable`.
+   - Includes booking reference ID, creator credentials, schedule timestamps, and financial itemization.
 
-## Deploy on Vercel
+5. **Dynamic Search, Filtering & Multi-Theme UI:**
+   - Real-time search by space name and city location.
+   - Discipline filtering (Photo Studios, Recording Booths, Film Stages, Podcast Suites, Art Lofts) with client-side sorting by rate and rating.
+   - Light and dark theme toggle powered by `next-themes` with hydration mismatch guards.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS, Lucide React icons
+- **Authentication:** Firebase Auth (Email/Password & Google Sign-In)
+- **State & Alerts:** React Context API, Sonner Toast Notifications
+- **Sliders & Carousels:** Swiper.js
+- **Document Generation:** jsPDF & jspdf-autotable
+- **Theme:** next-themes
+
+---
+
+## Local Development Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Sarwar-07/studiospace-client.git](https://github.com/Sarwar-07/studiospace-client.git)
+   cd studiospace-client
