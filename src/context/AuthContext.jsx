@@ -5,6 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   updateProfile,
   onAuthStateChanged
@@ -78,9 +80,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = () => {
-    // Initiate popup synchronously on click without any preceding state setters or microtasks
-    return signInWithPopup(auth, googleProvider);
+  const loginWithGoogle = async () => {
+    // Zero state setters before signInWithPopup
+    try {
+      return await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      if (error?.code === 'auth/popup-blocked' || error?.code === 'auth/cancelled-popup-request') {
+        console.warn('Popup blocked; falling back to signInWithRedirect');
+        return await signInWithRedirect(auth, googleProvider);
+      }
+      throw error;
+    }
   };
 
   const logoutUser = async () => {
@@ -114,6 +124,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    getRedirectResult(auth).catch((err) => {
+      console.warn('Redirect auth result check:', err);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser?.email) {

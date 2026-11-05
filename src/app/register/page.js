@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/firebase/firebase.config';
+import { signInWithPopup, signInWithRedirect, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '@/firebase/firebase.config';
 import { Sparkles, User, Image as ImageIcon, Mail, Lock, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { createUser, updateUserProfile } = useAuth();
+  const { user, createUser, updateUserProfile } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,6 +21,13 @@ export default function RegisterPage() {
     confirmPassword: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // If already authenticated (e.g. returning from signInWithRedirect), route to home
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -69,45 +76,46 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
     try {
-      // 1. MUST BE FIRST: Trigger popup immediately on physical click
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+      // 1. MUST BE FIRST: Synchronous trigger preserves trusted browser gesture
+      const result = await signInWithPopup(auth, provider);
+      const googleUser = result.user;
 
       setIsSubmitting(true);
 
-      // 2. State updates and backend JWT issuance run AFTER popup succeeds
+      // 2. Proceed with backend JWT issuance
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/auth/jwt`, {
+      await fetch(`${API_URL}/api/auth/jwt`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: user.email,
-          name: user.displayName,
-          photoURL: user.photoURL,
+          email: googleUser.email,
+          name: googleUser.displayName,
+          photoURL: googleUser.photoURL,
         }),
         credentials: 'include',
       });
 
-      const data = await response.json();
-      if (data.success) {
-        toast.success('Signed in successfully!');
-        router.push('/');
-        router.refresh();
-      } else {
-        toast.success('Signed in with Google!');
-        router.push('/');
-        router.refresh();
-      }
+      toast.success('Signed in with Google!');
+      router.push('/');
+      router.refresh();
     } catch (error) {
-      console.error('Google Sign-in Error:', error);
-      if (error?.code === 'auth/popup-blocked') {
-        toast.error('Sign-in popup was blocked by your browser. Please allow popups or disable adblockers for this site.');
-      } else if (error?.code === 'auth/popup-closed-by-user') {
-        toast.info('Sign-in popup closed.');
-      } else {
+      console.warn('Google Sign-in Error:', error);
+      // Fall back to redirect mode if browser or mobile blocks popups
+      if (error?.code === 'auth/popup-blocked' || error?.code === 'auth/cancelled-popup-request') {
+        console.warn('Popup blocked; falling back to signInWithRedirect');
+        try {
+          await signInWithRedirect(auth, provider);
+        } catch (redirectError) {
+          console.error('Redirect sign-in error:', redirectError);
+          toast.error(redirectError?.message?.replace('Firebase: ', '') || 'Failed to redirect to Google');
+        }
+      } else if (error?.code !== 'auth/popup-closed-by-user') {
         toast.error(error?.message?.replace('Firebase: ', '') || 'Failed to authenticate with Google');
       }
     } finally {
