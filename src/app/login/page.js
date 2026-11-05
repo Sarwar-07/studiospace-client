@@ -4,6 +4,8 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '@/firebase/firebase.config';
 import { Sparkles, Mail, Lock, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -11,7 +13,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('redirect') || searchParams.get('from') || '/';
-  const { loginUser, loginWithGoogle } = useAuth();
+  const { loginUser } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,21 +43,47 @@ function LoginForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    setIsSubmitting(true);
     try {
-      await loginWithGoogle();
-      toast.success('Successfully authenticated with Google!');
-      router.push(from);
-      router.refresh();
-    } catch (err) {
-      console.error('Google sign-in failed:', {
-        code: err?.code,
-        message: err?.message,
-        customData: err?.customData,
-        response: err?.customData?._tokenResponse,
-        error: err
+      // 1. MUST BE FIRST: Trigger popup immediately on physical click
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      setIsSubmitting(true);
+
+      // 2. State updates and backend JWT issuance run AFTER popup succeeds
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${API_URL}/api/auth/jwt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user.email,
+          name: user.displayName,
+          photoURL: user.photoURL,
+        }),
+        credentials: 'include',
       });
-      toast.error(err.message?.replace('Firebase: ', '') || 'Google sign-in cancelled or failed.');
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Signed in successfully!');
+        router.push(from);
+        router.refresh();
+      } else {
+        toast.success('Successfully authenticated with Google!');
+        router.push(from);
+        router.refresh();
+      }
+    } catch (error) {
+      console.error('Google Sign-in Error:', error);
+      if (error?.code === 'auth/popup-blocked') {
+        toast.error('Sign-in popup was blocked by your browser. Please allow popups or disable adblockers for this site.');
+      } else if (error?.code === 'auth/popup-closed-by-user') {
+        toast.info('Sign-in popup closed.');
+      } else {
+        toast.error(error?.message?.replace('Firebase: ', '') || 'Failed to authenticate with Google');
+      }
     } finally {
       setIsSubmitting(false);
     }

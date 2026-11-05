@@ -78,21 +78,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = async () => {
-    setLoading(true);
-    try {
-      return await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      console.error('[AuthContext] loginWithGoogle error:', {
-        code: error?.code,
-        message: error?.message,
-        customData: error?.customData,
-        raw: error
-      });
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+  const loginWithGoogle = () => {
+    // Initiate popup synchronously on click without any preceding state setters or microtasks
+    return signInWithPopup(auth, googleProvider);
   };
 
   const logoutUser = async () => {
@@ -144,7 +132,9 @@ export const AuthProvider = ({ children }) => {
     loginUser,
     loginWithGoogle,
     logoutUser,
-    updateUserProfile
+    updateUserProfile,
+    auth,
+    googleProvider
   };
 
   return (
