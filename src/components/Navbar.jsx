@@ -42,16 +42,16 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 font-bold text-xl tracking-tight text-neutral-900 dark:text-neutral-50 hover:opacity-90 transition-opacity">
+          <Link href="/" className="flex items-center gap-3 font-bold text-xl tracking-tight text-neutral-900 dark:text-neutral-50 hover:opacity-90 transition-opacity">
             <Image
               src="/studio-space-logo.png"
               alt="StudioSpace Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain rounded-md"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain rounded-md"
               priority
             />
-            <span>Studio<span className="text-indigo-600 dark:text-indigo-400">Space</span></span>
+            <span className="font-bold text-xl tracking-tight">Studio<span className="text-indigo-600 dark:text-indigo-400">Space</span></span>
           </Link>
 
           {/* Desktop Navigation Links */}
