@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${inter.className} min-h-screen bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50 transition-colors duration-200 flex flex-col`}>
+      <body suppressHydrationWarning className={`${inter.className} min-h-screen bg-zinc-50 text-zinc-900 dark:bg-[#090a0f] dark:text-zinc-100 transition-colors duration-300 flex flex-col`}>
         <Providers>
           <Navbar />
           <main className="flex-1">

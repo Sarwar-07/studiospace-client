@@ -38,7 +38,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200/70 dark:border-zinc-800/80 transition-all">
+    <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-[#090a0f]/80 border-b border-zinc-200/70 dark:border-zinc-800/80 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
@@ -171,7 +171,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-4 pt-3 pb-6 space-y-2">
+        <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#090a0f] px-4 pt-3 pb-6 space-y-2">
           {navLinks.map((link) => (
             <Link
               key={link.href}

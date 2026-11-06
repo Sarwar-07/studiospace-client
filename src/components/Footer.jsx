@@ -12,12 +12,12 @@ export default function Footer() {
     setYear(new Date().getFullYear());
   }, []);
   return (
-    <footer className="mt-auto border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400">
+    <footer className="mt-auto border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#090a0f] text-zinc-600 dark:text-zinc-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="md:col-span-1 space-y-4">
-            <Link href="/" className="flex items-center gap-3 font-bold text-lg text-neutral-900 dark:text-neutral-50 hover:opacity-90 transition-opacity">
+            <Link href="/" className="flex items-center gap-3 font-bold text-lg text-zinc-900 dark:text-zinc-100 hover:opacity-90 transition-opacity">
               <Image
                 src="/studio-space-logo.png"
                 alt="StudioSpace Logo"
@@ -34,7 +34,7 @@ export default function Footer() {
 
           {/* Studio Disciplines */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 mb-4">Categories</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 mb-4">Categories</h4>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2"><Camera className="w-4 h-4 text-indigo-500" /> Photo Studios</li>
               <li className="flex items-center gap-2"><Music className="w-4 h-4 text-violet-500" /> Recording Booths</li>
@@ -45,7 +45,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 mb-4">Platform</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 mb-4">Platform</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/studios" className="hover:text-indigo-600 dark:hover:text-indigo-400">Browse Spaces</Link></li>
               <li><Link href="/studios/add" className="hover:text-indigo-600 dark:hover:text-indigo-400">Host a Studio</Link></li>
@@ -56,14 +56,14 @@ export default function Footer() {
 
           {/* Security & Reliability */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 mb-4">Guaranteed Trust</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 mb-4">Guaranteed Trust</h4>
             <p className="text-sm">
               Every booking is protected by automated slot conflict locking, verified host identities, and encrypted session management.
             </p>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-center text-xs text-neutral-500">
+        <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800 text-center text-xs text-zinc-500">
           © {year} StudioSpace Marketplace Inc. All rights reserved.
         </div>
       </div>
