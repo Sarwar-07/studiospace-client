@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, Camera, Music, Video, Palette } from 'lucide-react';
+import Image from 'next/image';
+import { Camera, Music, Video, Palette } from 'lucide-react';
 
 export default function Footer() {
   const [year, setYear] = useState(2026);
@@ -16,10 +17,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="md:col-span-1 space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-50">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white">
-                <Sparkles className="w-4 h-4" />
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 font-bold text-lg text-neutral-900 dark:text-neutral-50 hover:opacity-90 transition-opacity">
+              <Image
+                src="/studio-space-logo.png"
+                alt="StudioSpace Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain rounded-md"
+              />
               <span>Studio<span className="text-indigo-600 dark:text-indigo-400">Space</span></span>
             </Link>
             <p className="text-sm">

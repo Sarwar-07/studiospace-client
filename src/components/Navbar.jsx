@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from './ThemeToggle';
-import { Sparkles, Menu, X, LogOut, LayoutDashboard, Bookmark, PlusCircle, Compass } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard, Bookmark, PlusCircle, Compass } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Navbar() {
@@ -41,10 +42,15 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-neutral-900 dark:text-neutral-50">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-              <Sparkles className="w-5 h-5" />
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 font-bold text-xl tracking-tight text-neutral-900 dark:text-neutral-50 hover:opacity-90 transition-opacity">
+            <Image
+              src="/studio-space-logo.png"
+              alt="StudioSpace Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain rounded-md"
+              priority
+            />
             <span>Studio<span className="text-indigo-600 dark:text-indigo-400">Space</span></span>
           </Link>
 
