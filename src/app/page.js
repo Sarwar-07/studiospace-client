@@ -20,166 +20,171 @@ async function getFeaturedStudios() {
 }
 
 const categories = [
-  { name: 'Photo Studio', icon: Camera, color: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50' },
-  { name: 'Recording Booth', icon: Music, color: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/50' },
-  { name: 'Film Stage', icon: Video, color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50' },
-  { name: 'Podcast Suite', icon: Mic2, color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50' },
-  { name: 'Art Loft', icon: Palette, color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50' }
+  { name: 'Photo Studio', icon: Camera },
+  { name: 'Recording Booth', icon: Music },
+  { name: 'Film Stage', icon: Video },
+  { name: 'Podcast Suite', icon: Mic2 },
+  { name: 'Art Loft', icon: Palette }
 ];
 
 export default async function HomePage() {
   const featuredStudios = await getFeaturedStudios();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
-      {/* 1. Modern Cinematic Hero Section */}
-      <HeroSlider />
+    <div className="min-h-screen bg-zinc-50/70 text-zinc-900 selection:bg-indigo-500 selection:text-white relative overflow-hidden">
+      {/* Subtle Top Radial Gradient Mesh */}
+      <div className="absolute top-0 inset-x-0 h-[640px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-100/50 via-zinc-50/20 to-transparent pointer-events-none -z-10" />
 
-      {/* 2. Browse by Creative Discipline */}
-      <section className="mb-20">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 mb-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              Specialized Production Hubs
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight">
-              Browse by Creative Discipline
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Find purpose-built spaces optimized for your specific recording or shooting pipeline
-            </p>
-          </div>
-          <Link
-            href="/studios"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors shrink-0"
-          >
-            <span>All Spaces</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        {/* 1. High-Impact Cinematic Hero Section */}
+        <HeroSlider />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {categories.map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <Link
-                key={cat.name}
-                href={`/studios?category=${encodeURIComponent(cat.name)}`}
-                className="group hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 p-5 text-center flex flex-col items-center justify-center"
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 mb-3 ${cat.color}`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-                <h3 className="font-semibold text-sm text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                  {cat.name}
-                </h3>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 3. Top Rated Creative Studios */}
-      <section className="mb-20">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 mb-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              Curated Production Spaces
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight">
-              Top Rated Creative Studios
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Handpicked environments verified for acoustics, continuous lighting, and rigging capacity
-            </p>
-          </div>
-          <Link
-            href="/studios"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors shrink-0"
-          >
-            <span>View Directory</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {featuredStudios.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredStudios.map((studio) => (
-              <StudioCard key={studio._id} studio={studio} />
-            ))}
-          </div>
-        ) : (
-          <div className="p-12 text-center rounded-3xl border border-dashed border-zinc-300 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
-            <h3 className="text-lg font-semibold text-zinc-700 dark:text-zinc-300">
-              No studios featured yet
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">
-              Be the first creator to list a sound booth, cyclorama, or loft on StudioSpace.
-            </p>
+        {/* 2. Category Discipline Grid */}
+        <section className="mb-20">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1.5 mb-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                Creative Disciplines
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+                Browse by Creative Discipline
+              </h2>
+              <p className="text-sm text-zinc-500 mt-1">
+                Find purpose-built spaces optimized for your specific recording or shooting pipeline
+              </p>
+            </div>
             <Link
-              href="/studios/add"
-              className="mt-4 inline-block px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition"
+              href="/studios"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors shrink-0"
             >
-              Add Listing
+              <span>Explore All Spaces</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        )}
-      </section>
 
-      {/* 4. Engineered for Creators (Value Props Bento Grid) */}
-      <section className="bg-gradient-to-b from-zinc-50/50 to-white dark:from-zinc-900/40 dark:to-zinc-950 border-y border-zinc-200/60 dark:border-zinc-800/60 py-16 px-4 sm:px-8 rounded-3xl">
-        <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            Platform Architecture
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight mt-1">
-            Engineered for Creators & Professional Hosts
-          </h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-            Eliminating booking friction and scheduling collisions with verified production-ready specifications.
-          </p>
-        </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {categories.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <Link
+                  key={cat.name}
+                  href={`/studios?category=${encodeURIComponent(cat.name)}`}
+                  className="p-5 rounded-2xl bg-white border border-zinc-200/80 shadow-sm hover:shadow-xl hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-sm text-zinc-800 group-hover:text-indigo-600 transition-colors">
+                    {cat.name}
+                  </h3>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          <div className="p-6 sm:p-8 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200/70 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-5">
-              <Clock className="w-6 h-6" />
+        {/* 3. Top Rated Creative Studios (Peerspace / Airbnb Luxe Showcase) */}
+        <section className="mb-20">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1.5 mb-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                Curated Luxury Workspaces
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+                Top Rated Creative Studios
+              </h2>
+              <p className="text-sm text-zinc-500 mt-1">
+                Verified high-production environments for commercial shoots, sound design, and art galleries
+              </p>
             </div>
-            <h3 className="font-bold text-base text-zinc-900 dark:text-zinc-100 mb-2">
-              Slot Conflict Prevention
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Our automated engine checks time-slot intersections, making double booking mathematically impossible.
+            <Link
+              href="/studios"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors shrink-0"
+            >
+              <span>View Full Directory</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {featuredStudios.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredStudios.map((studio) => (
+                <StudioCard key={studio._id} studio={studio} />
+              ))}
+            </div>
+          ) : (
+            <div className="p-12 text-center rounded-3xl border border-dashed border-zinc-300 bg-white shadow-sm">
+              <h3 className="text-lg font-semibold text-zinc-800">
+                No featured studios currently listed
+              </h3>
+              <p className="text-sm text-zinc-500 mt-1 max-w-sm mx-auto">
+                Be the first verified host to showcase your creative studio on StudioSpace.
+              </p>
+              <Link
+                href="/studios/add"
+                className="mt-4 inline-block px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition"
+              >
+                List Your Space
+              </Link>
+            </div>
+          )}
+        </section>
+
+        {/* 4. "Engineered for Creators" (Value Props Bento) */}
+        <section className="mb-12">
+          <div className="max-w-2xl mx-auto text-center mb-10">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+              The StudioSpace Difference
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight mt-1">
+              Engineered for Creators & Professional Hosts
+            </h2>
+            <p className="text-sm text-zinc-500 mt-2">
+              Eliminating double-booking friction with verified acoustic, electrical, and lighting specs.
             </p>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200/70 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-violet-500/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center mb-5">
-              <ShieldCheck className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-zinc-900 mb-2">
+                Slot Conflict Prevention
+              </h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Our automated collision engine validates time-slot intervals, guaranteeing overlapping sessions are mathematically impossible.
+              </p>
             </div>
-            <h3 className="font-bold text-base text-zinc-900 dark:text-zinc-100 mb-2">
-              Verified Host Equipment
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Every space includes explicit equipment inventories, acoustic ratings, and transparent hourly rates.
-            </p>
-          </div>
 
-          <div className="p-6 sm:p-8 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200/70 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-emerald-500/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5">
-              <Zap className="w-6 h-6" />
+            <div className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-zinc-900 mb-2">
+                Verified Host Equipment
+              </h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Every space includes explicit equipment inventories, power specs, acoustic isolation ratings, and transparent hourly rates.
+              </p>
             </div>
-            <h3 className="font-bold text-base text-zinc-900 dark:text-zinc-100 mb-2">
-              Instant Confirmations
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Lock down production days with transparent rates, downloadable PDF receipts, and immediate host notifications.
-            </p>
+
+            <div className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-zinc-900 mb-2">
+                Instant Confirmations
+              </h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Lock down production days with transparent rates, downloadable PDF reservation slips, and immediate host alerts.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }
