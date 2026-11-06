@@ -27,7 +27,12 @@ export default function WishlistPage() {
 
   const fetchWishlist = useCallback(async () => {
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/wishlist`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
       if (!res.ok) throw new Error('Failed to retrieve wishlist');
@@ -56,8 +61,13 @@ export default function WishlistPage() {
   const handleRemove = async (studioId, studioTitle) => {
     setRemovingId(studioId);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/wishlist/${studioId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
 

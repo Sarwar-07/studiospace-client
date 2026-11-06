@@ -29,14 +29,24 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include',
         body: JSON.stringify({ email }),
       });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.token && typeof window !== 'undefined') {
+          localStorage.setItem('access-token', data.token);
+        }
+        return data;
+      }
       return res;
     } catch (err) {
-      console.warn('Failed to issue JWT cookie (server may be offline or starting up):', err);
+      console.warn('Failed to issue JWT cookie/token (server may be offline or starting up):', err);
     }
   }, [API_URL]);
 
   const clearJwtCookie = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('access-token');
+      }
       await fetch(`${API_URL}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include'
@@ -133,7 +143,7 @@ export const AuthProvider = ({ children }) => {
           const redirectUser = result.user;
           // Issue backend JWT cookie
           try {
-            await fetch(`${API_URL}/api/auth/jwt`, {
+            const res = await fetch(`${API_URL}/api/auth/jwt`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -143,6 +153,12 @@ export const AuthProvider = ({ children }) => {
               }),
               credentials: 'include',
             });
+            if (res.ok) {
+              const data = await res.json();
+              if (data?.token && typeof window !== 'undefined') {
+                localStorage.setItem('access-token', data.token);
+              }
+            }
           } catch (jwtErr) {
             console.warn('Redirect JWT issuance warning:', jwtErr);
           }
@@ -158,6 +174,10 @@ export const AuthProvider = ({ children }) => {
         setUser(currentUser);
         if (currentUser?.email) {
           await issueJwtToken(currentUser.email);
+        } else {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('access-token');
+          }
         }
         setLoading(false);
       }

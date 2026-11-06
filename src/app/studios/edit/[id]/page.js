@@ -135,9 +135,13 @@ export default function EditStudioPage() {
     };
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/studios/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify(payload),
         credentials: 'include'
       });

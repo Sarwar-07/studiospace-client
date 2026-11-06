@@ -71,6 +71,13 @@ function LoginForm() {
         credentials: 'include',
       });
 
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.token && typeof window !== 'undefined') {
+          localStorage.setItem('access-token', data.token);
+        }
+      }
+
       toast.success('Signed in successfully!');
       router.push(from || '/');
     } catch (error) {

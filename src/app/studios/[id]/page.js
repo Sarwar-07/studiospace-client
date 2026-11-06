@@ -67,7 +67,12 @@ export default function StudioDetailPage() {
     async function checkWishlist() {
       if (!user || !id) return;
       try {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
         const res = await fetch(`${API_URL}/api/wishlist`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           credentials: 'include'
         });
         if (res.ok) {
@@ -92,10 +97,14 @@ export default function StudioDetailPage() {
 
     setWishlistLoading(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       if (!isWishlisted) {
         const res = await fetch(`${API_URL}/api/wishlist`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           body: JSON.stringify({ studioId: id }),
           credentials: 'include'
         });
@@ -112,6 +121,10 @@ export default function StudioDetailPage() {
       } else {
         const res = await fetch(`${API_URL}/api/wishlist/${id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           credentials: 'include'
         });
 
@@ -150,9 +163,13 @@ export default function StudioDetailPage() {
 
     setBookingSubmitting(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/bookings`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           studioId: id,
           bookingDate,

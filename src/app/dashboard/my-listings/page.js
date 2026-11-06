@@ -50,7 +50,12 @@ export default function MyListingsPage() {
 
   const fetchMyListings = useCallback(async () => {
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/my-listings`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
       if (!res.ok) throw new Error('Failed to load listings');
@@ -96,9 +101,13 @@ export default function MyListingsPage() {
     setIsUpdating(true);
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/studios/${editingStudio._id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           ...editFormData,
           hourlyRate: parseFloat(editFormData.hourlyRate),
@@ -131,8 +140,13 @@ export default function MyListingsPage() {
 
     setDeletingId(id);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/studios/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
 

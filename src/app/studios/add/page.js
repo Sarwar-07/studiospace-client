@@ -102,9 +102,13 @@ export default function AddStudioPage() {
     };
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/studios`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify(payload),
         credentials: 'include'
       });

@@ -34,7 +34,12 @@ export default function DashboardOverviewPage() {
 
   const fetchStats = useCallback(async () => {
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/dashboard/stats`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
       if (!res.ok) throw new Error('Failed to load dashboard metrics');

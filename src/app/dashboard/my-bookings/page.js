@@ -31,7 +31,12 @@ export default function MyBookingsPage() {
 
   const fetchBookings = useCallback(async () => {
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/my-bookings`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
       if (!res.ok) throw new Error('Failed to retrieve bookings');
@@ -70,8 +75,13 @@ export default function MyBookingsPage() {
 
     setCancellingId(id);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access-token') : null;
       const res = await fetch(`${API_URL}/api/bookings/${id}/cancel`, {
         method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: 'include'
       });
 
