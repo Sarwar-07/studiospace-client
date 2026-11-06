@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/firebase/firebase.config';
-import { Sparkles, User, Image as ImageIcon, Mail, Lock, ArrowRight } from 'lucide-react';
+import { User, Image as ImageIcon, Mail, Lock, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 function RegisterForm() {
@@ -120,13 +120,17 @@ function RegisterForm() {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md p-8 bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-xl shadow-neutral-500/5">
+      <div className="w-full max-w-md p-8 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-500/5">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25">
-            <Sparkles className="w-6 h-6" />
+          <div className="flex justify-center mb-4">
+            <img
+              src="/studio-space-logo.png"
+              alt="StudioSpace Logo"
+              className="w-12 h-12 object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">Create an Account</h1>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Create an Account</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             Join our community of hosts and creative producers
           </p>
         </div>
@@ -138,7 +142,7 @@ function RegisterForm() {
             e.stopPropagation();
             handleGoogleSignIn();
           }}
-          className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition font-medium text-slate-700 dark:text-slate-200 shadow-sm"
+          className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition font-medium text-zinc-700 dark:text-zinc-200 shadow-sm"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -150,18 +154,18 @@ function RegisterForm() {
         </button>
 
         <div className="flex items-center my-6">
-          <div className="flex-1 border-t border-neutral-200 dark:border-neutral-800" />
-          <span className="px-3 text-xs uppercase tracking-wider text-neutral-400">or registration form</span>
-          <div className="flex-1 border-t border-neutral-200 dark:border-neutral-800" />
+          <div className="flex-1 border-t border-zinc-200 dark:border-zinc-800" />
+          <span className="px-3 text-xs uppercase tracking-wider text-zinc-400">or registration form</span>
+          <div className="flex-1 border-t border-zinc-200 dark:border-zinc-800" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Full Name
             </label>
             <div className="relative">
-              <User className="w-5 h-5 absolute left-3.5 top-3.5 text-neutral-400" />
+              <User className="w-5 h-5 absolute left-3.5 top-3.5 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="text"
                 name="name"
@@ -169,34 +173,34 @@ function RegisterForm() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Alex Turner"
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Avatar Image URL
             </label>
             <div className="relative">
-              <ImageIcon className="w-5 h-5 absolute left-3.5 top-3.5 text-neutral-400" />
+              <ImageIcon className="w-5 h-5 absolute left-3.5 top-3.5 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="url"
                 name="photoURL"
                 value={formData.photoURL}
                 onChange={handleChange}
                 placeholder="https://images.unsplash.com/photo-..."
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-5 h-5 absolute left-3.5 top-3.5 text-neutral-400" />
+              <Mail className="w-5 h-5 absolute left-3.5 top-3.5 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="email"
                 name="email"
@@ -204,17 +208,17 @@ function RegisterForm() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="alex@studio.io"
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-5 h-5 absolute left-3.5 top-3.5 text-neutral-400" />
+              <Lock className="w-5 h-5 absolute left-3.5 top-3.5 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="password"
                 name="password"
@@ -222,17 +226,17 @@ function RegisterForm() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Min. 6 chars, uppercase & lowercase"
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Confirm Password
             </label>
             <div className="relative">
-              <Lock className="w-5 h-5 absolute left-3.5 top-3.5 text-neutral-400" />
+              <Lock className="w-5 h-5 absolute left-3.5 top-3.5 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="password"
                 name="confirmPassword"
@@ -240,7 +244,7 @@ function RegisterForm() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Repeat password"
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
           </div>
@@ -255,7 +259,7 @@ function RegisterForm() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mt-6">
+        <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-6">
           Already have an account?{' '}
           <Link href="/login" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
             Sign In
@@ -268,7 +272,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className="min-h-[85vh] flex items-center justify-center text-sm text-neutral-500">Loading registration...</div>}>
+    <Suspense fallback={<div className="min-h-[85vh] flex items-center justify-center text-sm text-zinc-500">Loading registration...</div>}>
       <RegisterForm />
     </Suspense>
   );
