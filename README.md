@@ -6,16 +6,24 @@ A modern full-stack creative workspace marketplace frontend built with **Next.js
 
 ## Live Links & Repositories
 
-- **Live Client Application:** [studiospace-client.vercel.app](https://studiospace-client.vercel.app) *(Update with your production Vercel URL)*
-- **Server API Repository:** [https://github.com/Sarwar-07/studiospace-server](https://github.com/Sarwar-07/studiospace-server)
+- **Live Client Application:** [https://studiospace-client-eta-six.vercel.app](https://studiospace-client-eta-six.vercel.app)
+- **Live Server API:** [https://studiospace-server-livid.vercel.app](https://studiospace-server-livid.vercel.app)
 - **Client Repository:** [https://github.com/Sarwar-07/studiospace-client](https://github.com/Sarwar-07/studiospace-client)
+- **Server Repository:** [https://github.com/Sarwar-07/studiospace-server](https://github.com/Sarwar-07/studiospace-server)
+
+---
+
+## 🔑 Demo Host Credentials (Evaluator Testing)
+All 12 pre-seeded studio spaces across various creative disciplines are linked to this host account:
+- **Host Email:** `svenbrunner000@gmail.com`
+- **Access:** Sign in with Email/Password or continue via Google OAuth / new registration.
 
 ---
 
 ## Core Features & Challenge Solutions
 
 1. **Secure Session Shielding (JWT & HTTPOnly Cookies):**
-   - Seamlessly integrates Firebase Auth on the client with Express session tokens passed via secure `credentials: 'include'` cookies.
+   - Seamlessly integrates Firebase Auth on the client with Express session tokens passed via secure `credentials: 'include'` cookies or `Authorization: Bearer <token>` headers.
    - Guarded private routes for Studio creation, booking management, listings control, and user wishlists.
 
 2. **Automated Double-Booking Prevention UI:**
@@ -54,5 +62,28 @@ A modern full-stack creative workspace marketplace frontend built with **Next.js
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Sarwar-07/studiospace-client.git](https://github.com/Sarwar-07/studiospace-client.git)
+   git clone https://github.com/Sarwar-07/studiospace-client.git
    cd studiospace-client
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   NEXT_PUBLIC_API_URL=http://localhost:5000
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
