@@ -32,67 +32,77 @@ const slides = [
 
 export default function HeroSlider() {
   return (
-    <div className="relative w-full mb-16 sm:mb-20">
-      {/* Ambient Background Glow */}
-      <div className="absolute -inset-1.5 bg-gradient-to-r from-violet-600/30 via-indigo-600/25 to-pink-600/30 rounded-3xl blur-2xl opacity-60 dark:opacity-40 -z-10 pointer-events-none" />
+    <div className="relative w-full mb-12 sm:mb-16">
+      {/* Subtle Ambient Background Glow */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-violet-600/20 via-indigo-600/15 to-pink-600/20 rounded-3xl blur-xl opacity-50 pointer-events-none -z-10" />
 
-      <div className="relative rounded-3xl overflow-hidden shadow-2xl mx-auto max-w-7xl border border-zinc-200/70 dark:border-zinc-800/80">
+      {/* Compact & Balanced Slider Container */}
+      <div className="relative w-full max-w-7xl mx-auto rounded-3xl overflow-hidden shadow-xl h-[380px] sm:h-[420px] lg:h-[450px] border border-zinc-200/70 dark:border-zinc-800/80">
         <Swiper
           modules={[Autoplay, Pagination, EffectFade]}
           effect="fade"
           speed={900}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
-          className="w-full min-h-[520px] lg:min-h-[580px]"
+          className="w-full h-full [&_.swiper-pagination]:!bottom-3.5 sm:[&_.swiper-pagination]:!bottom-4 [&_.swiper-pagination]:!z-20 [&_.swiper-pagination-bullet]:!bg-white/60 [&_.swiper-pagination-bullet-active]:!bg-white [&_.swiper-pagination-bullet-active]:!w-6 [&_.swiper-pagination-bullet]:!transition-all"
         >
           {slides.map((slide, idx) => (
-            <SwiperSlide key={idx} className="relative w-full min-h-[520px] lg:min-h-[580px]">
+            <SwiperSlide key={idx} className="relative w-full h-full">
+              {/* Full-bleed Background Image */}
               <img
                 src={slide.image}
                 alt={slide.title}
-                className="w-full h-full min-h-[520px] lg:min-h-[580px] object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              {/* Rich and Dramatic Horizontal Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/20 flex items-center p-8 sm:p-14 lg:p-16">
-                <div className="max-w-3xl text-white">
-                  <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/10 backdrop-blur-md text-white border border-white/20 mb-4 tracking-wider uppercase">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    {slide.tag}
-                  </span>
-                  <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.1]">
-                    {slide.title}
-                  </h1>
-                  <p className="text-zinc-300 text-base sm:text-lg max-w-xl mt-4 leading-relaxed">
-                    {slide.desc}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-8">
-                    <Link
-                      href="/studios"
-                      className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2"
-                    >
-                      <span>Explore All Studios</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                    <Link
-                      href="/studios/add"
-                      className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium px-6 py-3.5 rounded-xl transition-all inline-flex items-center gap-2"
-                    >
-                      Host Your Space
-                    </Link>
-                  </div>
 
-                  {/* Floating Trust Pill Row */}
-                  <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-8 pt-6 border-t border-white/15 text-xs text-zinc-300">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 font-medium">
-                      <span className="text-amber-400 font-bold">✦</span> 500+ Verified Spaces
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 font-medium">
-                      <span className="text-amber-400 font-bold">★</span> 4.9 Average Host Rating
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 font-medium">
-                      <span className="text-amber-400 font-bold">⚡</span> Instant Booking
-                    </span>
-                  </div>
+              {/* Crisp Contrast Dark Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-black/20" />
+
+              {/* Vertically Centered Content */}
+              <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-12 max-w-2xl text-white">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 backdrop-blur-md text-white border border-white/20 w-fit mb-2.5 tracking-wider uppercase">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  {slide.tag}
+                </span>
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+                  {slide.title}
+                </h1>
+
+                <p className="text-sm sm:text-base text-zinc-300 mt-2 line-clamp-2 leading-relaxed">
+                  {slide.desc}
+                </p>
+
+                {/* CTA Action Buttons */}
+                <div className="mt-6 flex items-center gap-3">
+                  <Link
+                    href="/studios"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2 text-sm"
+                  >
+                    <span>Explore Studios</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/studios/add"
+                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium px-5 py-2.5 sm:py-3 rounded-xl transition-all inline-flex items-center gap-2 text-sm"
+                  >
+                    Host Your Space
+                  </Link>
+                </div>
+
+                {/* Compact Inline Trust Badges */}
+                <div className="text-xs text-zinc-400 mt-4 flex items-center gap-3 sm:gap-4 flex-wrap">
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="text-amber-400 font-bold">✦</span> 500+ Verified Spaces
+                  </span>
+                  <span className="hidden sm:inline text-zinc-600">•</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="text-amber-400 font-bold">★</span> 4.9 Average Host Rating
+                  </span>
+                  <span className="hidden sm:inline text-zinc-600">•</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="text-amber-400 font-bold">⚡</span> Instant Booking
+                  </span>
                 </div>
               </div>
             </SwiperSlide>
